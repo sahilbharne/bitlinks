@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 
 export default function About() {
   return (
@@ -46,11 +47,11 @@ export default function About() {
           <p className="text-gray-700 text-lg">
             Ready to get started?
           </p>
-          <a href="/shorten">
+          <Link href="/shorten">
             <button className="mt-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition active:scale-95">
               Shorten Your First Link
             </button>
-          </a>
+          </Link>
         </div>
       </section>
     </main>
