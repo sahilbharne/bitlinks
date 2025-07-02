@@ -8,31 +8,33 @@ const Shorten = () => {
   const [generated, setGenerated] = useState("");
 
   const generate = () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    if (!url || !shortUrl) {
+      alert("Please enter both the original URL and the short URL.");
+      return;
+    }
 
-    const raw = JSON.stringify({
-      url: url,
-      shorturl: shortUrl,
-    });
-
-    const requestOptions = {
+    fetch("/api/generate", {
       method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch("/api/generate", requestOptions)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        url,
+        shorturl: shortUrl,
+      }),
+    })
       .then((response) => response.json())
       .then((result) => {
-        setGenerated(`${process.env.NEXT_PUBLIC_HOST}/${shortUrl}`);
-        setUrl("");
-        setShortUrl("");
+        if (result.success) {
+          setGenerated(`${window.location.origin}/${shortUrl}`);
+          setUrl("");
+          setShortUrl("");
+        }
         console.log(result);
         alert(result.message);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        alert("Something went wrong. Please try again.");
+      });
   };
 
   return (
